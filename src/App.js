@@ -8,10 +8,11 @@ import Signin from './Components/SignIn/Signin';
 import Register from './Components/Register/Register';
 import Particles from 'react-tsparticles';
 import Clarifai from 'clarifai';
+import myApiKey from './apikey';
 import './App.css';
 
 const app = new Clarifai.App({
-  apiKey:'6022cfbb1dfe4eec84ef5fe842865e76'
+  apiKey: myApiKey //enter your own clarifai API key
 });
 
 const particlesOptions = {
