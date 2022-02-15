@@ -8,7 +8,7 @@ import Signin from './Components/SignIn/Signin';
 import Register from './Components/Register/Register';
 import Particles from 'react-tsparticles';
 import Clarifai from 'clarifai';
-import myApiKey from './apikey'
+import myApiKey from './apiKey'
 import './App.css';
 
 
