@@ -94,30 +94,31 @@ const particlesOptions = {
     detectRetina: true,
   }
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id:'',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id:'',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
       name: data.name,
-      email: data.name,
+      email: data.email,
       entries: data.entries,
       joined: data.joined
     }})
@@ -162,7 +163,8 @@ class App extends Component {
             .then(response => response.json())
             .then(count => {
               this.setState(Object.assign(this.state.user, {entries: count})) 
-              });
+              })
+            .catch(console.log)
         }
          this.displayFaceBox(this.calculateFaceLocation(response))
       })
@@ -171,39 +173,39 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
-      this.setState({isSignedIn: 'true'})
+      this.setState({isSignedIn: true})
     }
     this.setState({route: route});
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
-  return (
-    <div className="App">
-        <Particles className='particles'
-          id="tsparticles"
-          options={particlesOptions}/>
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
-        {route === 'home' 
-          ? <div> 
-              <Logo />
-              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
-              <ImageLinkForm
-                onInputChange={this.onInputChange}
-                onPictureSubmit={this.onPictureSubmit}/>
-              <FaceRecognition box={box} imageUrl={imageUrl}/>
-            </div>
-          : (
-              route === 'signin' 
-              ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-              : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-            )
-        }  
-    </div>
-  );
-}
+      const { isSignedIn, imageUrl, route, box } = this.state;
+      return (
+      <div className="App">
+          <Particles className='particles'
+            id="tsparticles"
+            options={particlesOptions}/>
+          <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
+          {route === 'home' 
+            ? <div> 
+                <Logo />
+                <Rank name={this.state.user.name} entries={this.state.user.entries}/>
+                <ImageLinkForm
+                  onInputChange={this.onInputChange}
+                  onPictureSubmit={this.onPictureSubmit}/>
+                <FaceRecognition box={box} imageUrl={imageUrl}/>
+              </div>
+            : (
+                route === 'signin' 
+                ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+                : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+              )
+          }  
+      </div>
+    );
+  }
 }
 
 export default App;
